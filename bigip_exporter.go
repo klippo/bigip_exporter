@@ -2,55 +2,158 @@ package main
 
 import (
 	"net/http"
-	"strconv"
-	"strings"
-
-	"github.com/ExpressenAB/bigip_exporter/collector"
-	"github.com/ExpressenAB/bigip_exporter/config"
-	"github.com/juju/loggo"
+	"fmt"
+	"github.com/jenningsloy318/bigip_exporter/collector"
 	"github.com/pr8kerl/f5er/f5"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/log"
+	"github.com/prometheus/common/version"
+	"gopkg.in/alecthomas/kingpin.v2"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
+
+// define  flag
 var (
-	logger = loggo.GetLogger("")
+	listenAddress = kingpin.Flag(
+		"web.listen-address",
+		"Address to listen on for web interface and telemetry.",
+	).Default(":9142").String()
+	metricPath = kingpin.Flag(
+		"web.telemetry-path",
+		"Path under which to expose metrics.",
+	).Default("/bigip").String()
+	configFile = kingpin.Flag("config.file", "Path to configuration file.").Default("bigip-exporter.yml").String()
+	sc         = &SafeConfig{
+		C: &Config{},
+	}
+	reloadCh chan chan error
 )
 
-func listen(exporterBindAddress string, exporterBindPort int) {
-	http.Handle("/metrics", prometheus.Handler())
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`<html>
-			<head><title>BIG-IP Exporter</title></head>
-			<body>
-			<h1>BIG-IP Exporter</h1>
-			<p><a href="/metrics">Metrics</a></p>
-			</body>
-			</html>`))
-	})
-	exporterBind := exporterBindAddress + ":" + strconv.Itoa(exporterBindPort)
-	logger.Criticalf("Process failed: %s", http.ListenAndServe(exporterBind, nil))
+func init() {
+	prometheus.MustRegister(version.NewCollector("bigip_exporter"))
+}
+
+// define new http handleer
+func newHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		target := r.URL.Query().Get("target")
+		if target == "" {
+			http.Error(w, "'target' parameter must be specified", 400)
+			return
+		}
+		log.Debugf("Scraping target '%s'", target)
+		var targetCredentials Credentials
+		var err error
+		if targetCredentials, err = sc.CredentialsForTarget(target); err != nil {
+			log.Fatalf("Error getting credentialfor target %s file: %s", target, err)
+		}
+		user := targetCredentials.User
+		password := targetCredentials.Password
+		basicauth :=targetCredentials.BasicAuth
+
+		var exporterPartitionsList []string  = nil
+		 
+ 
+		authMethod := f5.TOKEN
+		if basicauth {
+			authMethod = f5.BASIC_AUTH
+		}
+		
+		bigip := f5.New(target, user, password, authMethod)
+		Namespace :=  "f5"
+		bigipCollector, _ := collector.NewBigipCollector(bigip, Namespace, exporterPartitionsList)
+
+	
+		registry := prometheus.NewRegistry()
+
+		registry.MustRegister(bigipCollector)
+
+		gatherers := prometheus.Gatherers{
+			prometheus.DefaultGatherer,
+			registry,
+		}
+		// Delegate http serving to Prometheus client library, which will call collector.Collect.
+		h := promhttp.HandlerFor(gatherers, promhttp.HandlerOpts{})
+		h.ServeHTTP(w, r)
+	}
+}
+
+func updateConfiguration(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		rc := make(chan error)
+		reloadCh <- rc
+		if err := <-rc; err != nil {
+			http.Error(w, fmt.Sprintf("failed to reload config: %s", err), http.StatusInternalServerError)
+		}
+	default:
+		log.Errorf("POST method expected")
+		http.Error(w, "POST method expected", 400)
+	}
 }
 
 func main() {
-	config := config.GetConfig()
-	logger.Debugf("Config: %v", config)
+	// Parse flags.
+	log.AddFlags(kingpin.CommandLine)
+	kingpin.Version(version.Print("bigip_exporter"))
+	kingpin.HelpFlag.Short('h')
+	kingpin.Parse()
 
-	bigipEndpoint := config.Bigip.Host + ":" + strconv.Itoa(config.Bigip.Port)
-	var exporterPartitionsList []string
-	if config.Exporter.Partitions != "" {
-		exporterPartitionsList = strings.Split(config.Exporter.Partitions, ",")
-	} else {
-		exporterPartitionsList = nil
-	}
-	authMethod := f5.TOKEN
-	if config.Bigip.BasicAuth {
-		authMethod = f5.BASIC_AUTH
+	if err := sc.ReloadConfig(*configFile); err != nil {
+		log.Fatalf("Error parsing config file: %s", err)
 	}
 
-	bigip := f5.New(bigipEndpoint, config.Bigip.Username, config.Bigip.Password, authMethod)
+	// landingPage contains the HTML served at '/'.
+	// TODO: Make this nicer and more informative.
+	var landingPage = []byte(`<html>
+<head><title>BigIP exporter</title></head>
+<body>
+<h1>BigIP exporter</h1>
+<p><a href='` + *metricPath + `'>Metrics</a></p>
+</body>
+</html>
+`)
 
-	bigipCollector, _ := collector.NewBigipCollector(bigip, config.Exporter.Namespace, exporterPartitionsList)
+	log.Infoln("Starting bigip_exporter", version.Info())
+	log.Infoln("Build context", version.BuildContext())
 
-	prometheus.MustRegister(bigipCollector)
-	listen(config.Exporter.BindAddress, config.Exporter.BindPort)
+	// Register only scrapers enabled by flag.
+
+
+	// load config  first time
+	hup := make(chan os.Signal)
+	reloadCh = make(chan chan error)
+	signal.Notify(hup, syscall.SIGHUP)
+
+	go func() {
+		for {
+			select {
+			case <-hup:
+				if err := sc.ReloadConfig(*configFile); err != nil {
+					log.Errorf("Error reloading config: %s", err)
+				}
+			case rc := <-reloadCh:
+				if err := sc.ReloadConfig(*configFile); err != nil {
+					log.Errorf("Error reloading config: %s", err)
+					rc <- err
+				} else {
+					rc <- nil
+				}
+			}
+		}
+	}()
+
+	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc(*metricPath, prometheus.InstrumentHandlerFunc("metrics", newHandler()))
+	http.HandleFunc("/-/reload", updateConfiguration) // reload config
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write(landingPage)
+	})
+
+	log.Infoln("Listening on", *listenAddress)
+	log.Fatal(http.ListenAndServe(*listenAddress, nil))
 }
