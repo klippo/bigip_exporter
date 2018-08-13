@@ -64,7 +64,7 @@ func newHandler() http.HandlerFunc {
 		}
 		
 		bigip := f5.New(target, user, password, authMethod)
-		Namespace :=  "f5"
+		Namespace :=  "bigip"
 		bigipCollector, _ := collector.NewBigipCollector(bigip, Namespace, exporterPartitionsList)
 
 	
