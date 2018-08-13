@@ -1,17 +1,2 @@
-# Ignore everything
-*
-# Don't ignore directories, so we can recurse into them
-!*/
-# Don't ignore .gitignore, LICENSE and *.go files
-!.gitignore
-!.dockerignore
-!LICENSE
-!*.go
-!.travis.yml
-!Makefile
-!vendor/**
-!Dockerfile
-!example_bigip_exporter.yml
-!build.sh
-src
-pkg
+vendor/*
+bigip_exporter
