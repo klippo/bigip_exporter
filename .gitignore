@@ -1,2 +1,3 @@
 vendor/*
 bigip_exporter
+*.tar.gz
