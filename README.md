@@ -1,6 +1,8 @@
 # BIG-IP exporter
 Prometheus exporter for BIG-IP statistics. Uses iControl REST API.
 
+based on https://github.com/ExpressenAB/bigip_exporter, I add support multi-instance monitoring, inspired by mysqld_exporter and ipmi_exporter, to rewirte bigip_exporter.go and config.go.
+
 ## Get it
 The latest version is 1.0.0. All releases can be found under [Releases](https://github.com/ExpressenAB/bigip_exporter/releases) and docker images are available at [Docker Hub](https://hub.docker.com/r/expressenab/bigip_exporter/tags/)(Thanks to [0x46616c6b](https://github.com/0x46616c6b)).
 
@@ -19,10 +21,31 @@ credentials:
 ```
 
 then you can get the metrics via 
-```shll
+```shell
 curl localhost:9142/bigip?target=<bigip_host>:443
 ```
 
+prometheus job config:
+```yaml
+
+- job_name: "bigip-exporter"
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  metrics_path: /bigip
+  scheme: http
+  file_sd_configs:
+  - files:
+    - 'tgroups/bigip.yml'
+    refresh_interval: 5m
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: 10.36.48.46:9142
+
+```
 #### Configuration file
 Take a look at this [example configuration file](https://github.com/jenningsloy318/bigip_exporter/blob/master/bigip_exporter.yml)
 
