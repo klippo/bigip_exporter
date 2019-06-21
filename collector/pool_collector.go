@@ -45,8 +45,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_connections"),
-					"serverside_connections",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_connections_active"),
+					"serverside_connections_active",
 					labelNames,
 					nil,
 				),
@@ -153,8 +153,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"curSessions": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "sessions"),
-					"sessions",
+					prometheus.BuildFQName(namespace, subsystem, "sessions_active"),
+					"sessions_active",
 					labelNames,
 					nil,
 				),

@@ -237,8 +237,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections"),
-					"ephemeral_connections",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_active"),
+					"ephemeral_connections_active",
 					labelNames,
 					nil,
 				),
@@ -345,8 +345,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_connections"),
-					"clientside_connections",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_active"),
+					"clientside_connections_active",
 					labelNames,
 					nil,
 				),
