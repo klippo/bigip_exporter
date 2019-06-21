@@ -249,8 +249,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_evictedConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_evicted_conns"),
-					"clientside_evicted_conns",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_evicted_total"),
+					"clientside_connections_evicted_total",
 					labelNames,
 					nil,
 				),
@@ -273,8 +273,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_evictedConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_evicted_conns"),
-					"ephemeral_evicted_conns",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_evicted_total"),
+					"ephemeral_connections_evicted_total",
 					labelNames,
 					nil,
 				),
