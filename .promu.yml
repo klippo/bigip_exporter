@@ -1,5 +1,5 @@
 repository:
-    path: github.com/jenningsloy318/bigip_exporter
+    path: github.com/klippo/bigip_exporter
 build:
     flags: -a -tags netgo
     

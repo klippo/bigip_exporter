@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 	"fmt"
-	"github.com/jenningsloy318/bigip_exporter/collector"
+	"github.com/klippo/bigip_exporter/collector"
 	"github.com/pr8kerl/f5er/f5"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
