@@ -16,7 +16,7 @@ all: deps vet fmt style staticcheck unused  build test
 
 ## ignore the error of "Using a deprecated function, variable, constant or field" when static check, refer to https://github.com/dominikh/go-tools/blob/master/cmd/staticcheck/docs/checks/SA1019
 STATICCHECK_IGNORE = \
-  github.com/jenningsloy318/bigip_exporter/bigip_exporter.go:SA1019 
+  github.com/klippo/bigip_exporter/bigip_exporter.go:SA1019
 
  
 style:

@@ -9,7 +9,7 @@ The latest version is 1.0.0. All releases can be found under [Releases](https://
 ## Usage
 The bigip_exporter is easy to use. Example:
 ```
-./bigip_exporter  --config.file="bigip_exporter.yml"
+./bigip_exporter  --config.file="bigip-exporter.yml"
 ```
 bigip_exporter.yml:
 ```yml
@@ -47,7 +47,7 @@ prometheus job config:
 
 ```
 #### Configuration file
-Take a look at this [example configuration file](https://github.com/jenningsloy318/bigip_exporter/blob/master/bigip_exporter.yml)
+Take a look at this [example configuration file](https://github.com/klippo/bigip_exporter/blob/master/bigip-exporter.yml)
 
 ## Implemented metrics
 * Virtual Server
