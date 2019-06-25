@@ -45,8 +45,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_cur_conns"),
-					"serverside_cur_conns",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_connections_active"),
+					"serverside_connections_active",
 					labelNames,
 					nil,
 				),
@@ -69,8 +69,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_bytesIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_bytes_in"),
-					"serverside_bytes_in",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_bytes_received_total"),
+					"serverside_bytes_received_total",
 					labelNames,
 					nil,
 				),
@@ -93,8 +93,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_pktsIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_pkts_in"),
-					"serverside_pkts_in",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_packets_received_total"),
+					"serverside_packets_received_total",
 					labelNames,
 					nil,
 				),
@@ -105,8 +105,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_maxConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_max_conns"),
-					"serverside_max_conns",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_connections_concurrent_max"),
+					"serverside_connections_concurrent_max",
 					labelNames,
 					nil,
 				),
@@ -153,8 +153,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"curSessions": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "cur_sessions"),
-					"cur_sessions",
+					prometheus.BuildFQName(namespace, subsystem, "sessions_active"),
+					"sessions_active",
 					labelNames,
 					nil,
 				),
@@ -177,8 +177,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"totRequests": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "tot_requests"),
-					"tot_requests",
+					prometheus.BuildFQName(namespace, subsystem, "requests_total"),
+					"requests_total",
 					labelNames,
 					nil,
 				),
@@ -237,8 +237,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_bytesOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_bytes_out"),
-					"serverside_bytes_out",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_bytes_transmitted_total"),
+					"serverside_bytes_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -285,8 +285,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_pktsOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_pkts_out"),
-					"serverside_pkts_out",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_packets_transmitted_total"),
+					"serverside_packets_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -297,8 +297,8 @@ func NewPoolCollector(bigip *f5.Device, namespace string, partitionsList []strin
 			},
 			"serverside_totConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "serverside_tot_conns"),
-					"serverside_tot_conns",
+					prometheus.BuildFQName(namespace, subsystem, "serverside_connections_total"),
+					"serverside_connections_total",
 					labelNames,
 					nil,
 				),

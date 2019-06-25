@@ -45,8 +45,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_bytesOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_bytes_out"),
-					"ephemeral_bytes_out",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_bytes_transmitted_total"),
+					"ephemeral_bytes_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -57,8 +57,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_bytesOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_bytes_out"),
-					"clientside_bytes_out",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_bytes_transmitted_total"),
+					"clientside_bytes_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -117,8 +117,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_pktsOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_pkts_out"),
-					"ephemeral_pkts_out",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_packets_transmitted_total"),
+					"ephemeral_packets_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -213,8 +213,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_pktsIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_pkts_in"),
-					"ephemeral_pkts_in",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_packets_received_total"),
+					"ephemeral_packets_received_total",
 					labelNames,
 					nil,
 				),
@@ -225,8 +225,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_totConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_tot_conns"),
-					"clientside_tot_conns",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_total"),
+					"clientside_connections_total",
 					labelNames,
 					nil,
 				),
@@ -237,8 +237,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_cur_conns"),
-					"ephemeral_cur_conns",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_active"),
+					"ephemeral_connections_active",
 					labelNames,
 					nil,
 				),
@@ -249,8 +249,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_evictedConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_evicted_conns"),
-					"clientside_evicted_conns",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_evicted_total"),
+					"clientside_connections_evicted_total",
 					labelNames,
 					nil,
 				),
@@ -273,8 +273,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_evictedConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_evicted_conns"),
-					"ephemeral_evicted_conns",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_evicted_total"),
+					"ephemeral_connections_evicted_total",
 					labelNames,
 					nil,
 				),
@@ -297,8 +297,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_bytesIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_bytes_in"),
-					"clientside_bytes_in",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_bytes_received_total"),
+					"clientside_bytes_received_total",
 					labelNames,
 					nil,
 				),
@@ -309,8 +309,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_maxConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_max_conns"),
-					"ephemeral_max_conns",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_concurrent_max"),
+					"ephemeral_connections_concurrent_max",
 					labelNames,
 					nil,
 				),
@@ -333,8 +333,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_pktsOut": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_pkts_out"),
-					"clientside_pkts_out",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_packets_transmitted_total"),
+					"clientside_packets_transmitted_total",
 					labelNames,
 					nil,
 				),
@@ -345,8 +345,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_curConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_cur_conns"),
-					"clientside_cur_conns",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_active"),
+					"clientside_connections_active",
 					labelNames,
 					nil,
 				),
@@ -357,8 +357,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_bytesIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_bytes_in"),
-					"ephemeral_bytes_in",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_bytes_received_total"),
+					"ephemeral_bytes_received_total",
 					labelNames,
 					nil,
 				),
@@ -369,8 +369,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_pktsIn": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_pkts_in"),
-					"clientside_pkts_in",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_packets_received_total"),
+					"clientside_packets_received_total",
 					labelNames,
 					nil,
 				),
@@ -381,8 +381,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"totRequests": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "tot_requests"),
-					"tot_requests",
+					prometheus.BuildFQName(namespace, subsystem, "requests_total"),
+					"requests_total",
 					labelNames,
 					nil,
 				),
@@ -417,8 +417,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"clientside_maxConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "clientside_max_conns"),
-					"clientside_max_conns",
+					prometheus.BuildFQName(namespace, subsystem, "clientside_connections_concurrent_max"),
+					"clientside_connections_concurrent_max",
 					labelNames,
 					nil,
 				),
@@ -429,8 +429,8 @@ func NewVSCollector(bigip *f5.Device, namespace string, partitionsList []string)
 			},
 			"ephemeral_totConns": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "ephemeral_tot_conns"),
-					"ephemeral_tot_conns",
+					prometheus.BuildFQName(namespace, subsystem, "ephemeral_connections_total"),
+					"ephemeral_connections_total",
 					labelNames,
 					nil,
 				),
